@@ -16,8 +16,7 @@ export async function generateStaticParams() {
 }
 
 export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  // Await the params before using its properties
-  const { slug } = await params;  // Explicitly await params
+  const { slug } = params;
 
   const products = await contentfulClient.getEntries<ProductSkeleton>({
     content_type: "product",
@@ -36,7 +35,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
-            <div key={product.sys.id} className="border border-gray-200 -rounded-lg p-4">
+            <div key={product.sys.id} className="border border-gray-200 rounded-lg p-4">
               <h2 className="text-xl font-semibold">{product.fields.name}</h2>
               <p>Price: ${product.fields.price}</p>
               {product.fields.primaryImage &&
