@@ -2,6 +2,12 @@ import Image from "next/image";
 import { CategorySkeleton, contentfulClient, ProductSkeleton } from "@/lib/contentful";
 import { Entry } from "contentful";
 
+type CategoryPageProps = {
+  params: {
+    slug: string;
+  };
+};
+
 export async function generateStaticParams() {
   const products = await contentfulClient.getEntries<ProductSkeleton>({
     content_type: "product",
@@ -15,7 +21,7 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = params;
 
   const products = await contentfulClient.getEntries<ProductSkeleton>({
