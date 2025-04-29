@@ -17,16 +17,19 @@ export async function generateStaticParams() {
     return category.fields.slug;
   });
 
-  return slugs.map((slug) => ({ slug })); // Generate static params for each slug
+  // Remove duplicates if needed
+  const uniqueSlugs = Array.from(new Set(slugs));
+
+  return uniqueSlugs.map((slug) => ({ slug })); // Generate static params for each slug
 }
 
 export default async function ProductPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>; // <-- params is a Promise now
 }) {
-  // You need to await `params` before using its properties
-  const { slug } = await params; // Explicitly await the params
+  // Await the params promise
+  const { slug } = await params;
 
   // Fetch products based on the slug from Contentful
   const products = await contentfulClient.getEntries<ProductSkeleton>({
